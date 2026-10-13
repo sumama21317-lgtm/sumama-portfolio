@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow | To-Do App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <p class="tag">YOUR PERSONAL PLANNER</p>
+        <h1>TaskFlow ✨</h1>
+        <p class="subtitle">Small steps. Big progress.</p>
+
+        <div class="input-area">
+            <input type="text" id="taskInput" placeholder="What do you need to do?">
+            <button onclick="addTask()">Add</button>
+        </div>
+
+        <p class="task-count">Your Tasks: <span id="count">0</span></p>
+        <ul id="taskList"></ul>
+
+        <button class="clear" onclick="clearTasks()">Clear All Tasks</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
