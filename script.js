@@ -1,65 +1,73 @@
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+const navLinks = document.querySelectorAll(".nav-link");
+const sections = document.querySelectorAll("main section[id]");
+const filters = document.querySelectorAll(".filter");
+const projects = document.querySelectorAll(".project-card");
+const backTop = document.getElementById("back-top");
 
-function saveTasks() {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-}
+navLinks.forEach(function(link) {
+    link.addEventListener("click", function() {
+        navLinks.forEach(function(item) {
+            item.classList.remove("active");
+        });
 
-function showTasks() {
-    let list = document.getElementById("taskList");
-    list.innerHTML = "";
+        link.classList.add("active");
+    });
+});
 
-    tasks.forEach(function(task, index) {
-        let item = document.createElement("li");
-        let name = document.createElement("span");
-        let remove = document.createElement("button");
+window.addEventListener("scroll", function() {
+    backTop.classList.toggle("show", window.scrollY > 400);
 
-        name.innerText = task.text;
-        remove.innerText = "Delete";
+    let current = "home";
 
-        if (task.done) {
-            item.classList.add("done");
+    sections.forEach(function(section) {
+        if (window.scrollY >= section.offsetTop - 180) {
+            current = section.id;
         }
-
-        name.onclick = function() {
-            tasks[index].done = !tasks[index].done;
-            saveTasks();
-            showTasks();
-        };
-
-        remove.onclick = function() {
-            tasks.splice(index, 1);
-            saveTasks();
-            showTasks();
-        };
-
-        item.appendChild(name);
-        item.appendChild(remove);
-        list.appendChild(item);
     });
 
-    document.getElementById("count").innerText = tasks.length;
-}
+    navLinks.forEach(function(link) {
+        link.classList.toggle(
+            "active",
+            link.getAttribute("href") === "#" + current
+        );
+    });
+});
 
-function addTask() {
-    let input = document.getElementById("taskInput");
-    let text = input.value.trim();
+backTop.addEventListener("click", function() {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+});
 
-    if (text === "") {
-        alert("Please enter a task!");
-        return;
-    }
+filters.forEach(function(button) {
+    button.addEventListener("click", function() {
+        filters.forEach(function(item) {
+            item.classList.remove("active");
+        });
 
-    tasks.push({ text: text, done: false });
-    input.value = "";
+        button.classList.add("active");
 
-    saveTasks();
-    showTasks();
-}
+        const category = button.dataset.filter;
 
-function clearTasks() {
-    tasks = [];
-    saveTasks();
-    showTasks();
-}
+        projects.forEach(function(project) {
+            if (
+                category === "all" ||
+                project.dataset.category === category
+            ) {
+                project.classList.remove("hidden");
+            } else {
+                project.classList.add("hidden");
+            }
+        });
+    });
+});
 
-showTasks();
+document.getElementById("contact-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    document.getElementById("form-note").textContent =
+        "Form design is ready! Connect an email service to receive messages.";
+
+    this.reset();
+});
